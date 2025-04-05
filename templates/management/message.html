@@ -1,0 +1,19 @@
+
+<link rel="stylesheet" href="https://www.polonel.com/dist/snackbar.min.css" />
+<script src="https://www.polonel.com/snackbar/src/jquery-2.2.0.min.js"></script>
+<script src="https://www.polonel.com/dist/snackbar.min.js"></script>
+
+
+{% if messages %}
+    {% for message in messages %}
+        {% if message.tags == 'error' %}
+        <script>
+            Snackbar.show({text: '{{message}}', pos: 'top-right', duration: 5000, backgroundColor: '#f70000'});
+        </script>
+        {% else %}
+        <script>
+            Snackbar.show({text: '{{message}}', pos: 'top-right', duration: 5000});
+        </script>
+        {% endif %}
+    {% endfor %}
+{% endif %}

@@ -1,0 +1,105 @@
+{% extends 'management/base.html' %}
+{% load static %}
+{% block content %}
+
+  <!--start main wrapper-->
+  <main class="main-wrapper">
+    <div class="main-content">
+      <!--breadcrumb-->
+				<div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
+					<div class="breadcrumb-title pe-3">Components</div>
+					<div class="ps-3">
+						<nav aria-label="breadcrumb">
+							<ol class="breadcrumb mb-0 p-0">
+								<li class="breadcrumb-item"><a href="javascript:;"><i class="bx bx-home-alt"></i></a>
+								</li>
+								<li class="breadcrumb-item active" aria-current="page">Starter Page</li>
+							</ol>
+						</nav>
+					</div>
+					<div class="ms-auto">
+						<div class="btn-group">
+							<button type="button" class="btn btn-primary">Settings</button>
+							<button type="button" class="btn btn-primary split-bg-primary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown">	<span class="visually-hidden">Toggle Dropdown</span>
+							</button>
+							<div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-end">	<a class="dropdown-item" href="javascript:;">Action</a>
+								<a class="dropdown-item" href="javascript:;">Another action</a>
+								<a class="dropdown-item" href="javascript:;">Something else here</a>
+								<div class="dropdown-divider"></div>	<a class="dropdown-item" href="javascript:;">Separated link</a>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!--end breadcrumb-->
+        <div class="row">
+          <div class="col-12 col-lg-12">
+              <div class="card">
+                 <div class="card-body">
+                {% if message %}
+                <h3>{{messages}}</h3>
+                {% endif %}
+
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                   <div class="mb-4">
+                      <h5 class="mb-3">Product Name</h5>
+                      <input type="text" value="{{product.product_name}}" class="form-control" id="product_name" name="product_name" placeholder="write title here....">
+                   </div>
+                   <div class="mb-4">
+                      <h5 class="mb-3">Product Description</h5>
+                      <input value="{{product.description}}" class="form-control" id="description" name="description" placeholder="write a description here..">
+                   </div>
+                   <div class="mb-4">
+                      <h5 class="mb-3">Product Price</h5>
+                      <input type="number" value="{{product.price}}" class="form-control" id="price" name="price" placeholder="write title here....">
+                    </div>
+                    <div class="mb-4">
+                        <label for="">Product Tag</label>
+                        <select name="tag_id" id="">
+                          {% for tag in tags %}
+                          <option value="{{tag.id}}">{{tag.name}}</option>
+                          {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="mb-4">
+                      <label for="">Product Catagory</label>
+                      <select name="category_id" id="">
+                        {% for c in category %}
+                        <option value="{{c.id}}">{{c.product_tittle}}</option>
+                        {% endfor %}
+                      </select>
+                    </div>
+
+                    <div class="mb-4">
+                        <h5 class="mb-3">Product rating</h5>
+                        <input type="text" value="{{product.rating}}" class="form-control" id="rating" name="rating" placeholder="write title here....">
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="">Product Vendor</label>
+                        <select name="vendor_id" id="">
+                          {% for v in vendor %}
+                          <option value="{{v.id}}">{{v.name}}</option>
+                          {% endfor %}
+                        </select>
+                        <br>
+                        <br>
+                        
+                    <div class="mb-4">
+                        <h5 class="mb-3">Product Images</h5>
+                        <input value="{{product.product_image}}" id="product_image" type="file" name="product_image" >
+                    </div>
+
+                    <div class="d-grid">
+                        <button type="submet" class="btn btn-primary">edit Product</button>
+                    
+                    </div>
+
+                </form>
+         </div><!--end row-->
+    </div>
+  </main>
+  <!--end main wrapper-->
+{% endblock %}

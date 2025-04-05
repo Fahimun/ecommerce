@@ -1,0 +1,110 @@
+{% load static %}
+ <table class="table align-middle" id="product_user_table" >
+    <thead class="table-light">
+      <tr>
+        <th>
+          <input class="form-check-input" type="checkbox">
+        </th>
+        <th>Product Name</th>
+        <th>Price</th>
+        <th>Category</th>
+        <th>Tags</th>
+        <th>Rating</th>
+        <th>Vendor</th>
+        <th>Date</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      {% for pro in all_products %}
+      <tr>
+        <td>
+          <input class="form-check-input" type="checkbox">
+        </td>
+        <td>
+          <div class="d-flex align-items-center gap-3">
+            <div class="product-box">
+              {% if pro.product_image %}
+              <img src="{{pro.product_image.url}}" width="70" class="rounded-3"
+                alt="">
+              {% endif %}
+            </div>
+        </td>
+        <td>{{pro.price}}</td>
+        <td>{{pro.category}}</td>
+        <td>
+
+          <div class="product-tags">
+            <a href="javascript:;" class="btn-tags">{{pro.category.name}}</a>
+            <a href="javascript:;" class="btn-tags">{{pro.product_name}}</a>
+            <a href="javascript:;" class="btn-tags">{{pro.description}}</a>
+            <a href="javascript:;" class="btn-tags">{{pro.tags}}</a>
+            <a href="javascript:;" class="btn-tags">{{pro.action}}</a>
+
+          </div>
+        </td>
+        <td>
+          <div class="product-rating">
+            <i class="bi bi-star-fill text-warning me-2"></i><span>{{pro.rating}}</span>
+          </div>
+        </td>
+        <td>
+          <a href="javascript:;">{{pro.vendor}}</a>
+        </td>
+        <td>
+          {{pro.created_at}}
+        </td>
+        <td>
+          <div class="dropdown">
+            <button class="btn btn-sm btn-filter dropdown-toggle dropdown-toggle-nocaret" type="button"
+              data-bs-toggle="dropdown">
+              <i class="bi bi-three-dots"></i>
+            </button>
+            
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item text-primary" href="{% url 'edit_product' pro.id %}">Edit</a></li>
+              <li><a class="dropdown-item text-danger" href="{% url 'delete_product' pro.id %}">Delete</a></li>
+              <li><a class="dropdown-item text-success" href="#">View</a></li>
+            </ul>
+           
+          </div>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <style>
+
+    .pagination li{
+        padding: 8px;
+        border: 1px solid white;
+        margin: 4px;
+        float: right;
+    }
+    .active-pagination{
+        background-color: blue;
+        color: black;
+    }
+  </style>
+  {% if all_products.has_other_pages %}
+      <ul class="pagination">
+          {% if all_products.has_previous %}
+              <li><a hx-get="?page={{ all_products.previous_page_number }}&type={{request.GET.type}}&request_type=htmx" hx-target="#product_user_table">&laquo;</a></li>
+          {% else %}
+              <li class="disabled"><span>&laquo;</span></li>
+          {% endif %}
+          {% for i in all_products.paginator.page_range %}
+              {% if all_products.number == i %}
+              <li class="active-pagination"><span>{{ i }} <span class="sr-only"></span></span></li>
+              {% else %}
+              <li><a hx-get="?page={{ i }}&type={{request.GET.type}}&request_type=htmx" hx-target="#product_user_table">{{ i }}</a></li>
+              {% endif %}
+          {% endfor %}
+          {% if all_products.has_next %}
+              <li><a hx-get="?page={{ all_products.next_page_number }}&type={{request.GET.type}}&request_type=htmx" hx-target="#product_user_table">&raquo;</a></li>
+          {% else %}
+              <li class="disabled"><span>&raquo;</span></li>
+          {% endif %}
+      </ul>
+  {% endif %}

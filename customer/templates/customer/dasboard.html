@@ -1,0 +1,147 @@
+{% extends 'customer/base.html' %}
+{% block content %}
+
+<!--start main wrapper-->
+<main class="main-wrapper">
+    <div class="main-content">
+        <!--breadcrumb-->
+        <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
+            <div class="breadcrumb-title pe-3">Components</div>
+            <div class="ps-3">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb mb-0 p-0">
+                        <li class="breadcrumb-item"><a href="javascript:;"><i class="bx bx-home-alt"></i></a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">Advance</li>
+                    </ol>
+                </nav>
+            </div>
+            <div class="ms-auto">
+                <div class="btn-group">
+                    <button type="button" class="btn btn-primary">Settings</button>
+                    <button type="button" class="btn btn-primary split-bg-primary dropdown-toggle dropdown-toggle-split"
+                        data-bs-toggle="dropdown"> <span class="visually-hidden">Toggle Dropdown</span>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-end"> <a class="dropdown-item"
+                            href="javascript:;">Action</a>
+                        <a class="dropdown-item" href="javascript:;">Another action</a>
+                        <a class="dropdown-item" href="javascript:;">Something else here</a>
+                        <div class="dropdown-divider"></div> <a class="dropdown-item" href="javascript:;">Separated
+                            link</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--end breadcrumb-->
+
+        <div class="row row-cols-1 row-cols-xl-2">
+            {% for all in all_products %}
+            <div class="col">
+                <div class="cart">
+                    <div class="row g-0">
+                        <div class="col-md-4 border-end">
+                            <div class="p-3">
+                                <img src="{{all.product_image.url}}" class="w-100 rounded-start" alt="...">
+                            </div>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="cart-body">
+                                <h5 class="cart-title">{{all.product_name}}</h5>
+                                <p class="cart-text">{{all.description}}
+                                </p>
+                                <h5>{{all.price}}</h5>
+                                <div class="mt-4 d-flex align-items-center justify-content-between">
+                                    <div class="d-flex gap-2">
+                                        <!-- Display "Edit Card" or "Create Card" based on form mode -->
+                                        
+                                          
+                                     
+                                        <a href="{% url 'add_to_cart' all.id %}" style="text-decoration: none;">
+                                            <button style="color: blue;" class="btn btn-light d-flex gap-2 px-3">
+                                                <i class="material-icons-outlined">shopping_basket</i>Add to Cart
+                                            </button>
+                                        </a>
+                                       
+                                    
+                                        <!-- Add to Cart Button -->
+                                  
+                                    </div>
+                                    <div class="d-flex gap-1">
+                                        <a href="javascript:;" class="sharelink"><i
+                                                class="material-icons-outlined">favorite_border</i></a>
+                                        <div class="dropdown position-relative">
+                                            <a href="javascript:;"
+                                                class="sharelink dropdown-toggle dropdown-toggle-nocaret"
+                                                data-bs-auto-close="outside" data-bs-toggle="dropdown"><i
+                                                    class="material-icons-outlined">share</i></a>
+                                            <div
+                                                class="dropdown-menu dropdown-menu-end dropdown-menu-share shadow-lg border-0 p-3">
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control ps-5"
+                                                        value="https://www.codervent.com" placeholder="Enter Url">
+                                                    <span
+                                                        class="material-icons-outlined position-absolute ms-3 translate-middle-y start-0 top-50">link</span>
+                                                    <span class="input-group-text gap-1"><i
+                                                            class="material-icons-outlined fs-6">content_copy</i>Copy
+                                                        link</span>
+                                                </div>
+                                                <div class="d-flex align-items-center gap-2 mt-3">
+                                                    <button
+                                                        class="py-1 px-3 border-0 rounded bg-pinterest text-white flex-fill d-flex gap-1"><i
+                                                            class="bi bi-pinterest"></i>Pinterest</button>
+                                                    <button
+                                                        class="py-1 px-3 border-0 rounded bg-facebook text-white flex-fill d-flex gap-1"><i
+                                                            class="bi bi-facebook"></i>Facebook</button>
+                                                    <button
+                                                        class="py-1 px-3 border-0 rounded bg-linkedin text-white flex-fill d-flex gap-1"><i
+                                                            class="bi bi-linkedin"></i>Linkedin</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            <style>
+                .pagination li {
+                    padding: 8px;
+                    border: 1px solid white;
+                    margin: 4px;
+                    float: right;
+                }
+
+                .active-pagination {
+                    background-color: blue;
+                    color: black;
+                }
+            </style>
+            {% if all_products.has_other_pages %}
+            <ul class="pagination">
+                {% if all_products.has_previous %}
+                <li><a href="?page={{ all_products.previous_page_number }}">&laquo;</a></li>
+                {% else %}
+                <li class="disabled"><span>&laquo;</span></li>
+                {% endif %}
+                {% for i in all_products.paginator.page_range %}
+                {% if users.number == i %}
+                <li class="active-pagination"><span>{{ i }} <span class="sr-only"></span></span></li>
+                {% else %}
+                <li><a href="?page={{ i }}">{{ i }}</a></li>
+                {% endif %}
+                {% endfor %}
+                {% if users.has_next %}
+                <li><a href="?page={{ all_products.next_page_number }}">&raquo;</a></li>
+                {% else %}
+                <li class="disabled"><span>&raquo;</span></li>
+                {% endif %}
+            </ul>
+            {% endif %}
+        </div>
+</main>
+<!--end main wrapper-->
+
+{% endblock %}
