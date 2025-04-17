@@ -2,7 +2,8 @@ from django.db import models
 from django.contrib.auth.models import User
 from management.models import *
 from django.utils.crypto import get_random_string
-
+from django.utils import timezone
+import uuid
 
  
 class Cart(models.Model):
@@ -16,14 +17,3 @@ class Cart(models.Model):
     
 
 
-
-
-class PasswordResetToken(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='customer_password_reset_tokens')
-    token = models.CharField(max_length=50, unique=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    def save(self, *args, **kwargs):
-        if not self.token:
-            self.token = get_random_string(50)
-        super().save(*args, **kwargs)

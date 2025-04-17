@@ -20,6 +20,9 @@ class Profile(models.Model):
         image = models.FileField(upload_to='image/',blank=True,null=True)
         profile_image = models.ImageField(upload_to='profile/image/')
         phone_number = models.CharField(blank=True,null=True,max_length=11)
+        email_verification_code = models.CharField(max_length=6, blank=True, null=True)
+        forgot_password_token = models.CharField(max_length=200, blank=True, null=True)
+        is_email_active = models.BooleanField(default=False)
       
 
 
