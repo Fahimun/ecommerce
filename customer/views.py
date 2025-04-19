@@ -11,6 +11,7 @@ from django.core.mail import send_mail
 from django.conf import settings
 from .views import *
 from django.urls import reverse
+from .models import Profile
 
 @login_required(login_url='/signin/')
 def dasboard(requst):
@@ -184,6 +185,45 @@ def forget_password(request):
     # GET রিকোয়েস্ট হলে forget-password পেজ রেন্ডার করা
     return render(request, 'customer/account/forget_password.html')
 
+from django.contrib.auth.hashers import make_password
+
+def reset_password(request, token):
+    try:
+        # প্রোফাইল থেকে টোকেন ম্যাচ করা
+        profile_obj = Profile.objects.get(forget_password_token=token)
+        user_obj = profile_obj.user
+        
+        if request.method == 'POST':
+            # ফর্ম থেকে নতুন পাসওয়ার্ড নেওয়া
+            new_password = request.POST.get('new_password')
+            confirm_password = request.POST.get('confirm_password')
+            
+            # পাসওয়ার্ড ভ্যালিডেশন
+            if new_password != confirm_password:
+                messages.error(request, "Passwords don't match!")
+                return redirect(f'/reset-password/{token}/')
+            
+            if len(new_password) < 8:
+                messages.error(request, "Password must be at least 8 characters long!")
+                return redirect(f'/reset-password/{token}/')
+                
+            # পাসওয়ার্ড আপডেট করা
+            user_obj.password = make_password(new_password)
+            user_obj.save()
+            
+            # টোকেন রিসেট করা
+            profile_obj.forget_password_token = None
+            profile_obj.save()
+            
+            messages.success(request, "Your password has been changed successfully!")
+            return redirect('login')  # আপনার লগিন পেজের নাম
+            
+        return render(request, 'customer/account/reset_password.html', {'user_id': user_obj.id})
+    
+    except Profile.DoesNotExist:
+        messages.error(request, "Invalid or expired password reset link!")
+        return redirect('forget_password')
+
 from django.http import HttpResponse
 def send_email(request):
         
@@ -199,7 +239,8 @@ def send_email(request):
         fail_silently=False,  # Set to True in production to avoid errors stopping execution
     )
     return HttpResponse('Email Has been Send.')
-        
+
+
 def verify_email(request):
     if request.method == 'POST':
         otp = request.POST.get('otp')
